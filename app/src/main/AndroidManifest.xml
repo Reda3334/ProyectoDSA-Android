@@ -58,6 +58,9 @@
         <activity
             android:name=".activity.LevelListActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.FAQActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

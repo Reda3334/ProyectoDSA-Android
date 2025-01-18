@@ -160,13 +160,13 @@
 
             <ImageButton
 
-                android:id="@+id/btnminim"
+                android:id="@+id/btnfaq"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/store_button"
                 android:scaleType="centerCrop"
-                android:src="@drawable/banania_logo" />  <!-- to be done -->
+                android:src="@drawable/faq_icon" />  <!-- to be done -->
         </FrameLayout>
 
 

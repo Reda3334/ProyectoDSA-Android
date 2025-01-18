@@ -1,6 +1,7 @@
 package com.example.proyectodsa_android;
 
 import com.example.proyectodsa_android.models.CustomLevel;
+import com.example.proyectodsa_android.models.FAQ;
 import com.example.proyectodsa_android.models.InventoryObject;
 import com.example.proyectodsa_android.models.Level;
 import com.example.proyectodsa_android.models.LoginRequest;
@@ -97,4 +98,8 @@ public interface ApiService {
 
     @GET("levels/user/{userId}")
     Call<List<CustomLevel>> getLevels();
+
+    @GET("faqs")
+    Call<List<FAQ>> getFAQs();
+
 }

@@ -26,7 +26,7 @@ import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
     private ApiService apiService;
-    private ImageButton btnUserStuff, btnStore,btnPlay, btnEditor, btnLevelList;
+    private ImageButton btnUserStuff, btnStore,btnPlay, btnEditor, btnLevelList,btnFaq;
     private TextView tvPuntos, tvUsername;
     private Button btnLogout;
     private String userID, userEmail, token,username;
@@ -45,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         btnPlay = findViewById(R.id.btnPlay);
         btnEditor = findViewById(R.id.btnEditor);
+        btnFaq = findViewById(R.id.btnfaq);
 
         btnLevelList = findViewById(R.id.btnLevelList);
 
@@ -123,6 +124,14 @@ public class HomeActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("cookie", token);
             intent.putExtra("userItems", new GsonBuilder().create().toJson(inventoryItems));
+            startActivity(intent);
+        });
+
+        btnFaq.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FAQActivity.class);
+            intent.putExtra("username", username);
+            intent.putExtra("userID", userID);
+            intent.putExtra("token", token);
             startActivity(intent);
         });
 
