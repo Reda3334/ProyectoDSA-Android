@@ -69,7 +69,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
             tvName.setText(item.getName());
             tvPrice.setText(String.format("%.2f €", item.getPrice()));
 
-            String baseUrl = "http://localhost:8080/";
+            String baseUrl = "http://147.83.7.205/";
             String imageUrl = item.getImageUrl();
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 if (!imageUrl.startsWith("http")) {

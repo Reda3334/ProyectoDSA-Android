@@ -59,7 +59,6 @@ public class LevelListActivity extends AppCompatActivity {
                     List<CustomLevel> levelList = response.body();
                     levelAdapter = new LevelAdapter(LevelListActivity.this, levelList);
                     levelAdapter.setOnItemClickListener(LevelListActivity.this::openGame);
-                    Log.d("a", levelList.get(0).getLevelName());
                     recyclerView.setAdapter(levelAdapter);
                 } else {
                     Log.e(TAG, "Failed to fetch levels: " + response.code());

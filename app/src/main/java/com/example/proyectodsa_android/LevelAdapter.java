@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectodsa_android.models.CustomLevel;
-import com.example.proyectodsa_android.models.StoreObject;
 
 import java.util.List;
 
@@ -35,8 +34,7 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHol
     public void onBindViewHolder(@NonNull LevelViewHolder holder, int position) {
         CustomLevel level = levelList.get(position);
         holder.levelName.setText(level.getLevelName());
-        holder.userId.setText("User ID: " + level.getUserId());
-        holder.levelId.setText("Level ID: " + level.getId());
+        holder.userId.setText("Creator: " + level.getUserName());
 
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
@@ -51,13 +49,12 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHol
     }
 
     static class LevelViewHolder extends RecyclerView.ViewHolder {
-        TextView levelName, userId, levelId;
+        TextView levelName, userId;
 
         public LevelViewHolder(@NonNull View itemView) {
             super(itemView);
             levelName = itemView.findViewById(R.id.levelName);
             userId = itemView.findViewById(R.id.userId);
-            levelId = itemView.findViewById(R.id.levelId);
         }
     }
 

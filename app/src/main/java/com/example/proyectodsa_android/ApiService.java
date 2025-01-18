@@ -96,7 +96,7 @@ public interface ApiService {
             @Body String levelJson
     );
 
-    @GET("levels/user/{userId}")
+    @GET("levels/")
     Call<List<CustomLevel>> getLevels();
 
     @GET("faqs")
