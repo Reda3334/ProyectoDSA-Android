@@ -24,10 +24,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Name"
-                android:textSize="16sp"
                 android:textColor="#000000"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@id/tvPrice"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Price (右侧) -->
@@ -36,8 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Price"
-                android:textSize="16sp"
                 android:textColor="@android:color/holo_green_dark"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvName" />
 
@@ -49,8 +49,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/store_item_image" />
+            android:contentDescription="@string/store_item_image"
+            android:scaleType="centerCrop" />
 
     </LinearLayout>
 
