@@ -97,7 +97,7 @@ public interface ApiService {
     );
 
     @GET("levels/")
-    Call<List<CustomLevel>> getLevels();
+    Call<List<Level>> getLevels();
 
     @GET("faqs")
     Call<List<FAQ>> getFAQs();
