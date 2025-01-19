@@ -38,7 +38,7 @@ public class SubmitQuestionActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.etTitle);
         etMessage = findViewById(R.id.etMessage);
         btnSubmit = findViewById(R.id.btnSubmit);
-        btnBackToHome = findViewById(R.id.btnBackToHome);
+        btnBackToHome = findViewById(R.id.btnBack);
 
         apiService = RetrofitClient.getInstance().getApi();
 
