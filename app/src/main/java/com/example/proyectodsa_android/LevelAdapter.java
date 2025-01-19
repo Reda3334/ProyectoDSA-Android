@@ -7,18 +7,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.proyectodsa_android.models.CustomLevel;
+import com.example.proyectodsa_android.R;
+import com.example.proyectodsa_android.models.Level;
 
 import java.util.List;
 
 public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHolder> {
 
     private final Context context;
-    private final List<CustomLevel> levelList;
-    private OnItemClickListener onItemClickListener;
+    private final List<Level> levelList;
 
-    public LevelAdapter(Context context, List<CustomLevel> levelList) {
+    public LevelAdapter(Context context, List<Level> levelList) {
         this.context = context;
         this.levelList = levelList;
     }
@@ -32,15 +31,15 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHol
 
     @Override
     public void onBindViewHolder(@NonNull LevelViewHolder holder, int position) {
-        CustomLevel level = levelList.get(position);
-        holder.levelName.setText(level.getLevelName());
-        holder.userId.setText("Creator: " + level.getUserName());
+        Level level = levelList.get(position);
 
-        holder.itemView.setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(level);
-            }
-        });
+        // Debug log
+        android.util.Log.d("LevelAdapter", "Binding level: " + level.toString());
+
+        // Set data to views
+        holder.levelName.setText(level.getLevelName() != null ? level.getLevelName() : "No Name");
+        holder.userId.setText("Creator User Name: " + (level.getUserId() != null ? level.getUserId() : "Unknown"));
+        holder.levelId.setText("Level ID: " + (level.getId() != null ? level.getId() : "Unknown"));
     }
 
     @Override
@@ -49,21 +48,13 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHol
     }
 
     static class LevelViewHolder extends RecyclerView.ViewHolder {
-        TextView levelName, userId;
+        TextView levelName, userId, levelId;
 
         public LevelViewHolder(@NonNull View itemView) {
             super(itemView);
             levelName = itemView.findViewById(R.id.levelName);
             userId = itemView.findViewById(R.id.userId);
+            levelId = itemView.findViewById(R.id.levelId);
         }
     }
-
-    public interface OnItemClickListener {
-        void onItemClick(CustomLevel level);
-    }
-
-    public void setOnItemClickListener(LevelAdapter.OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
 }
-

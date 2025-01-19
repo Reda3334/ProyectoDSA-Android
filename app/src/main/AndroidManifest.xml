@@ -37,7 +37,8 @@
             android:exported="false" />
         <activity
             android:name=".activity.AuthActivity"
-            android:exported="false" />
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        </activity>
         <activity
             android:name=".activity.UserProfileActivity"
             android:exported="false" />
@@ -61,6 +62,11 @@
         <activity
             android:name=".activity.FAQActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activity.SubmitQuestionActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

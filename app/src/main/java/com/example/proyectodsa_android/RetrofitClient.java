@@ -1,5 +1,6 @@
 package com.example.proyectodsa_android;
 
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -10,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitClient {
-    private static final String BASE_URL = "http://147.83.7.205/dsaApp/";
+    private static final String BASE_URL = "http://10.0.2.2:8080/dsaApp/";
     private static RetrofitClient instance;
     private Retrofit retrofit;
 
@@ -31,8 +32,8 @@ public class RetrofitClient {
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
-                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
 

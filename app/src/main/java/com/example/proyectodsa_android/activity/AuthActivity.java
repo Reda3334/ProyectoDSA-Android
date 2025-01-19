@@ -16,6 +16,10 @@ import com.example.proyectodsa_android.models.LoginRequest;
 import com.example.proyectodsa_android.R;
 import com.example.proyectodsa_android.RetrofitClient;
 import com.example.proyectodsa_android.models.User;
+
+import java.io.IOException;
+import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +30,8 @@ public class AuthActivity extends AppCompatActivity {
     private Button btnRegister, btnLogin;
     private TextView tvSwitchToLogin, tvSwitchToRegister;
     private ApiService apiService;
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.])(?=\\S+$).{8,}$";
+    private static final String USERNAME_PATTERN = "^[a-zA-Z0-9]+$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +75,33 @@ public class AuthActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
         String confirmPassword = etConfirmPassword.getText().toString();
 
-
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        // Compruebe que todos los campos están rellenados
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Formato del nombre de usuario de autenticación
+        if (!username.matches(USERNAME_PATTERN)) {
+            etUsername.setError("Username can only contain letters and numbers");
+            return;
+        }
+
+        // Formato del correo electrónico de verificación
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Please enter a valid e-mail address\n");
+            return;
+        }
+
+        // Verificar la seguridad de la contraseña
+        if (!isPasswordValid(password)) {
+            etPassword.setError("Passwords must contain at least 8 characters, including upper and lower case letters, numbers and special characters\n");
+            return;
+        }
+
+        // Comprueba que las dos contraseñas son iguales
         if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            etConfirmPassword.setError("Inconsistent passwords entered twice\n");
             return;
         }
 
@@ -93,28 +118,66 @@ public class AuthActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(AuthActivity.this,
-                            "Registration successful", Toast.LENGTH_SHORT).show();
-                    viewFlipper.setDisplayedChild(1);
+                            "Successful registration", Toast.LENGTH_SHORT).show();
+                    viewFlipper.setDisplayedChild(1); // Switch to the login page
                     etLoginIdentifier.setText(username);
                     etLoginPassword.setText(password);
                 } else {
-                    Toast.makeText(AuthActivity.this,
-                            "Registration failed: " + response.code(),
-                            Toast.LENGTH_SHORT).show();
-                    Log.e("AuthActivity", "Registration failed: " + response.code() +
-                            " - " + response.message());
+                    try {
+                        String errorBody = response.errorBody().string();
+                        Log.e("AuthActivity", "Registration error: " + errorBody);
+
+                        switch (response.code()) {
+                            case 409:
+                                etUsername.setError("Username already exists, please select another username");
+                                Toast.makeText(AuthActivity.this,
+                                        "Username already exists, please select another username",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            case 400:
+                                Toast.makeText(AuthActivity.this,
+                                        "The request is formatted incorrectly, please check the input",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            case 422:
+                                Toast.makeText(AuthActivity.this,
+                                        "Input validation failed, check all fields",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            case 500:
+                                Toast.makeText(AuthActivity.this,
+                                        "Server error, please try again later\n",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                Toast.makeText(AuthActivity.this,
+                                        "Registration Failure\n: " + errorBody,
+                                        Toast.LENGTH_LONG).show();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(AuthActivity.this,
+                                "Registration failed, please try again later",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                Log.e("AuthActivity", "Network error", t);
                 Toast.makeText(AuthActivity.this,
-                        "Error: " + t.getMessage(),
+                        "network error: " + t.getMessage(),
                         Toast.LENGTH_SHORT).show();
-                Log.e("AuthActivity", "Registration error", t);
             }
         });
     }
+
+    private boolean isPasswordValid(String password) {
+        Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+        return pattern.matcher(password).matches();
+    }
+
     private void handleLogin() {
         String identifier = etLoginIdentifier.getText().toString();
         String password = etLoginPassword.getText().toString();
@@ -158,7 +221,7 @@ public class AuthActivity extends AppCompatActivity {
             SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
             prefs.edit()
                     .putString("username", user.getUsername())
-                    .putString("token", rawToken)  // 保存完整的Cookie字符串
+                    .putString("token", rawToken)
                     .apply();
 
 

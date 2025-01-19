@@ -7,6 +7,7 @@ import com.example.proyectodsa_android.models.Level;
 import com.example.proyectodsa_android.models.LoginRequest;
 import com.example.proyectodsa_android.models.PasswordChangeRequest;
 import com.example.proyectodsa_android.models.ScoreData;
+import com.example.proyectodsa_android.models.QuestionPayload;
 import com.example.proyectodsa_android.models.StoreObject;
 import com.example.proyectodsa_android.models.User;
 
@@ -107,4 +108,9 @@ public interface ApiService {
     Call<Void> sendSL(@Header("Cookie") String token,
                       @Path("userID") String userId,
                       @Body ScoreData scoreData);
+    @POST("question")
+    Call<Void> postQuestion(
+            @Body QuestionPayload payload
+    );
+
 }

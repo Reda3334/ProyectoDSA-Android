@@ -1,5 +1,6 @@
 package com.example.proyectodsa_android.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -41,6 +42,7 @@ public class FAQActivity extends AppCompatActivity {
 
         rvFAQs = findViewById(R.id.rvFAQs);
         ImageButton btnBack = findViewById(R.id.btnBack);
+        ImageButton btnNewQuestion = findViewById(R.id.btnNewQuestion);
 
         apiService = RetrofitClient.getInstance().getApi();
         faqAdapter = new FAQAdapter();
@@ -48,7 +50,21 @@ public class FAQActivity extends AppCompatActivity {
         rvFAQs.setLayoutManager(new LinearLayoutManager(this));
 
         btnBack.setOnClickListener(v -> finish());
+        btnNewQuestion.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SubmitQuestionActivity.class);
 
+            // 获取传递过来的数据
+            String username = getIntent().getStringExtra("username");
+            String userID = getIntent().getStringExtra("userID");
+            String token = getIntent().getStringExtra("token");
+
+            // 将用户信息传递到 SubmitQuestionActivity
+            intent.putExtra("username", username);
+            intent.putExtra("userID", userID);
+            intent.putExtra("token", token);
+
+            startActivity(intent);
+        });
         loadFAQs();
     }
 

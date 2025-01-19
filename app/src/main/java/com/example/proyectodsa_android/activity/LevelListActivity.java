@@ -1,65 +1,83 @@
 package com.example.proyectodsa_android.activity;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.proyectodsa_android.ApiService;
 import com.example.proyectodsa_android.R;
-import com.example.proyectodsa_android.RetrofitClient;
 import com.example.proyectodsa_android.LevelAdapter;
-import com.example.proyectodsa_android.models.CustomLevel;
-import com.google.android.gms.common.util.JsonUtils;
-import com.google.gson.Gson;
-
+import com.example.proyectodsa_android.models.Level;
+import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LevelListActivity extends AppCompatActivity {
 
     private static final String TAG = "LevelListActivity";
+    private String username;
+    private TextView tvUsername;
     private RecyclerView recyclerView;
     private LevelAdapter levelAdapter;
-    private String userID, username, token;
+    private List<Level> levelList = new ArrayList<>(); // Initialize empty list
+
+    // Retrofit instance
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_list);
 
-        userID = getIntent().getStringExtra("userID");
+        // Initialize views
+        tvUsername = findViewById(R.id.tvUsername);
         username = getIntent().getStringExtra("username");
-        token = getIntent().getStringExtra("token");
+        tvUsername.setText(username);
+
+        // Initialize Retrofit instance
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/dsaApp/") // Your API base URL
+                .addConverterFactory(GsonConverterFactory.create()) // Add Gson converter
+                .build();
 
         recyclerView = findViewById(R.id.recyclerViewLevels);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Initialize the adapter with an empty list
+        levelAdapter = new LevelAdapter(this, levelList);
+        recyclerView.setAdapter(levelAdapter);
+
         Button btnBack = findViewById(R.id.btnBack);
-
-        fetchLevels();
-
         btnBack.setOnClickListener(v -> finish());
+
+        // Fetch levels from the API
+        fetchLevels();
     }
 
     private void fetchLevels() {
-        ApiService apiService = RetrofitClient.getInstance().getApi();
+        // Create ApiService using Retrofit instance
+        ApiService apiService = retrofit.create(ApiService.class);
 
-        apiService.getLevels().enqueue(new Callback<List<CustomLevel>>() {
+        // Make the API call
+        apiService.getLevels().enqueue(new Callback<List<Level>>() {
             @Override
-            public void onResponse(Call<List<CustomLevel>> call, Response<List<CustomLevel>> response) {
+            public void onResponse(Call<List<Level>> call, Response<List<Level>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<CustomLevel> levelList = response.body();
-                    levelAdapter = new LevelAdapter(LevelListActivity.this, levelList);
-                    levelAdapter.setOnItemClickListener(LevelListActivity.this::openGame);
-                    recyclerView.setAdapter(levelAdapter);
+                    // Clear existing data
+                    levelList.clear();
+                    // Add new data
+                    levelList.addAll(response.body());
+                    // Notify the adapter about data changes
+                    levelAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "Received level list: " + levelList);
                 } else {
                     Log.e(TAG, "Failed to fetch levels: " + response.code());
                     Toast.makeText(LevelListActivity.this, "Failed to load levels", Toast.LENGTH_SHORT).show();
@@ -67,25 +85,10 @@ public class LevelListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<CustomLevel>> call, Throwable t) {
+            public void onFailure(Call<List<Level>> call, Throwable t) {
                 Log.e(TAG, "Error fetching levels", t);
                 Toast.makeText(LevelListActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-    private void openGame(CustomLevel level){
-        SharedPreferences prefs = getSharedPreferences("com.example.proyectodsa_android.v2.playerprefs", MODE_PRIVATE);
-        prefs.edit().putString("sceneToLoad", "Main").apply();
-        prefs.edit().putString("userId", userID).apply();
-        prefs.edit().putString("playerName", username).apply();
-
-        Intent intent = new Intent(this, UnityWrapperActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("cookie", token);
-        intent.putExtra("customLevel", new Gson().toJson(level));
-        startActivity(intent);
-    }
-
-
 }
