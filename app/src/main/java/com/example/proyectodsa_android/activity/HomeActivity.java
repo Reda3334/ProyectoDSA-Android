@@ -111,6 +111,7 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, UnityWrapperActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("cookie", token);
+            intent.putExtra("userId", userID);
             startActivity(intent);
         });
 
@@ -170,6 +171,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onRestart(){
         super.onRestart();
         getUserObjects();
+        loadUserPuntos();
     }
 
     @Override
