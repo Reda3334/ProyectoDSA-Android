@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:background="?attr/colorPrimary">
+        android:background="#4CAF50">
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -107,6 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="Save Changes"
+                android:backgroundTint="#4CAF50"
                 android:padding="12dp"/>
 
             <!-- 修改密码按钮 -->
