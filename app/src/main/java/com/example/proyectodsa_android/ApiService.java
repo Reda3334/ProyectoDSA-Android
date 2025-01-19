@@ -6,6 +6,7 @@ import com.example.proyectodsa_android.models.InventoryObject;
 import com.example.proyectodsa_android.models.Level;
 import com.example.proyectodsa_android.models.LoginRequest;
 import com.example.proyectodsa_android.models.PasswordChangeRequest;
+import com.example.proyectodsa_android.models.QuestionPayload;
 import com.example.proyectodsa_android.models.StoreObject;
 import com.example.proyectodsa_android.models.User;
 
@@ -101,5 +102,10 @@ public interface ApiService {
 
     @GET("faqs")
     Call<List<FAQ>> getFAQs();
+
+    @POST("question")
+    Call<Void> postQuestion(
+            @Body QuestionPayload payload
+    );
 
 }

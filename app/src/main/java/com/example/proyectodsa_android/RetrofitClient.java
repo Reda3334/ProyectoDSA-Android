@@ -1,5 +1,6 @@
 package com.example.proyectodsa_android;
 
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -31,8 +32,8 @@ public class RetrofitClient {
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
-                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
 
