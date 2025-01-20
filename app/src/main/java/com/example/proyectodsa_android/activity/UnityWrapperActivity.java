@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.proyectodsa_android.ApiService;
 import com.example.proyectodsa_android.RetrofitClient;
+import com.example.proyectodsa_android.models.CustomLevel;
 import com.example.proyectodsa_android.models.ScoreData;
 import com.google.gson.GsonBuilder;
 import com.unity3d.player.UnityPlayer;
@@ -36,7 +37,8 @@ public class UnityWrapperActivity extends UnityPlayerGameActivity {
             return;
         }
         try{
-            Response<Void> r = apiService.uploadLevel(token,"application/json", json).execute();
+            CustomLevel level = new GsonBuilder().create().fromJson(json, CustomLevel.class);
+            Response<Void> r = apiService.uploadLevel(token, level).execute();
             if(!r.isSuccessful()){
                 sendToast("Unexpected internal error");
             }else{

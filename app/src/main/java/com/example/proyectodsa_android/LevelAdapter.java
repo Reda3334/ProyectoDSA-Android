@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectodsa_android.R;
+import com.example.proyectodsa_android.models.CustomLevel;
 import com.example.proyectodsa_android.models.Level;
 
 import java.util.List;
@@ -15,9 +16,9 @@ import java.util.List;
 public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHolder> {
 
     private final Context context;
-    private final List<Level> levelList;
+    private final List<CustomLevel> levelList;
 
-    public LevelAdapter(Context context, List<Level> levelList) {
+    public LevelAdapter(Context context, List<CustomLevel> levelList) {
         this.context = context;
         this.levelList = levelList;
     }
@@ -31,14 +32,14 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHol
 
     @Override
     public void onBindViewHolder(@NonNull LevelViewHolder holder, int position) {
-        Level level = levelList.get(position);
+        CustomLevel level = levelList.get(position);
 
         // Debug log
         android.util.Log.d("LevelAdapter", "Binding level: " + level.toString());
 
         // Set data to views
         holder.levelName.setText(level.getLevelName() != null ? level.getLevelName() : "No Name");
-        holder.userId.setText("Creator User Name: " + (level.getUserId() != null ? level.getUserId() : "Unknown"));
+        holder.userId.setText("Creator User Name: " + (level.getUserName() != null ? level.getUserName() : "Unknown"));
         holder.levelId.setText("Level ID: " + (level.getId() != null ? level.getId() : "Unknown"));
     }
 

@@ -12,7 +12,6 @@ import com.example.proyectodsa_android.models.StoreObject;
 import com.example.proyectodsa_android.models.User;
 
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -94,12 +93,11 @@ public interface ApiService {
     @POST("levels/uploadLevel")
     Call<Void> uploadLevel(
             @Header("Cookie") String token,
-            @Header("Content-Type") String contentType,
-            @Body String levelJson
+            @Body CustomLevel level
     );
 
     @GET("levels/")
-    Call<List<Level>> getLevels();
+    Call<List<CustomLevel>> getLevels();
 
     @GET("faqs")
     Call<List<FAQ>> getFAQs();

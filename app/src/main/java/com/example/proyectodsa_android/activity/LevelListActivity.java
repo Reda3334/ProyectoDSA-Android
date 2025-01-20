@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectodsa_android.ApiService;
 import com.example.proyectodsa_android.R;
 import com.example.proyectodsa_android.LevelAdapter;
+import com.example.proyectodsa_android.models.CustomLevel;
 import com.example.proyectodsa_android.models.Level;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class LevelListActivity extends AppCompatActivity {
     private TextView tvUsername;
     private RecyclerView recyclerView;
     private LevelAdapter levelAdapter;
-    private List<Level> levelList = new ArrayList<>(); // Initialize empty list
+    private List<CustomLevel> levelList = new ArrayList<>(); // Initialize empty list
 
     // Retrofit instance
     private Retrofit retrofit;
@@ -44,7 +45,7 @@ public class LevelListActivity extends AppCompatActivity {
 
         // Initialize Retrofit instance
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/dsaApp/") // Your API base URL
+                .baseUrl("http://147.83.7.205/dsaApp/") // Your API base URL
                 .addConverterFactory(GsonConverterFactory.create()) // Add Gson converter
                 .build();
 
@@ -67,9 +68,9 @@ public class LevelListActivity extends AppCompatActivity {
         ApiService apiService = retrofit.create(ApiService.class);
 
         // Make the API call
-        apiService.getLevels().enqueue(new Callback<List<Level>>() {
+        apiService.getLevels().enqueue(new Callback<List<CustomLevel>>() {
             @Override
-            public void onResponse(Call<List<Level>> call, Response<List<Level>> response) {
+            public void onResponse(Call<List<CustomLevel>> call, Response<List<CustomLevel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // Clear existing data
                     levelList.clear();
@@ -85,7 +86,7 @@ public class LevelListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Level>> call, Throwable t) {
+            public void onFailure(Call<List<CustomLevel>> call, Throwable t) {
                 Log.e(TAG, "Error fetching levels", t);
                 Toast.makeText(LevelListActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
